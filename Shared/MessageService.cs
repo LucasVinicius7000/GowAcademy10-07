@@ -19,7 +19,7 @@ namespace GowAcademy.Shared
         {
             ServiceBusReceiver receiver = _serviceBusClient.CreateReceiver(topicName, subscriptionName);
             var message = receiver.ReceiveMessageAsync().Result;
-            receiver.CompleteMessageAsync(message);
+            if(message is not null) receiver.CompleteMessageAsync(message);
             return message;
         }
         public List<ServiceBusReceivedMessage> GetTopicMessages(int number, string topicName, string subscriptionName)
@@ -113,7 +113,7 @@ namespace GowAcademy.Shared
             {
                 ServiceBusReceiver receiver = _serviceBusClient.CreateReceiver(queueName);
                 var message = await receiver.ReceiveMessageAsync();
-                await receiver.CompleteMessageAsync(message);
+                if(message is not null) await receiver.CompleteMessageAsync(message);
                 return message;
             }
             return null;
